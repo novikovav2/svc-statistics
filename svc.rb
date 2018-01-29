@@ -4,9 +4,9 @@
 # https://www.ibm.com/support/knowledgecenter/STLM6B_7.8.0/com.ibm.storwize.v3500.780.doc/svc_clusterstartstatswin_20qm0u.html
 #
 
-dir = '../iostat/' # Folder for statistics files
-influxdb_host = 'localhost' # InfluxDB host
-influxdb_db = 'svc' # InfluxDB database
+dir = './iostat/' # Folder for statistics files
+influxdb_host = ENV['SVC_IFLUX_HOST'] # InfluxDB host
+influxdb_db = ENV['SVC_IFLUX_DB'] # InfluxDB database
 
 require 'nokogiri'
 require 'date'
@@ -78,6 +78,6 @@ Dir.foreach(dir) do |file|
   vdisk_processing(xml) if @objects_type.to_s == 'virtualDiskStats'
 
   f.close
-  FileUtils.cp(dir + file, dir + 'old/')
+  FileUtils.cp(dir + file, dir + 'old/') # you can comment this line if do not want to save old statistics files
   FileUtils.remove(dir + file, force: true)
 end
