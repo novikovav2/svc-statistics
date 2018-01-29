@@ -5,8 +5,8 @@
 #
 
 dir = './iostat/' # Folder for statistics files
-influxdb_host = ENV['SVC_IFLUX_HOST'] # InfluxDB host
-influxdb_db = ENV['SVC_IFLUX_DB'] # InfluxDB database
+influxdb_host = ENV['SVC_INFLUX_HOST'] # InfluxDB host
+influxdb_db = ENV['SVC_INFLUX_DB'] # InfluxDB database
 
 require 'nokogiri'
 require 'date'
