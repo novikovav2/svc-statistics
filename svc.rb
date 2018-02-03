@@ -8,7 +8,7 @@ dir = './iostat/' # Folder for statistics files
 influxdb_host = ENV['SVC_INFLUX_HOST'] # InfluxDB host
 influxdb_db = ENV['SVC_INFLUX_DB'] # InfluxDB database
 
-require 'nokogiri'
+require 'nokogiri' 			# for parsing XML
 require 'date'
 require 'time'
 require 'influxdb'
@@ -16,6 +16,7 @@ require 'fileutils'
 
 @influxdb = InfluxDB::Client.new influxdb_db, host: influxdb_host
 
+# ========= MDISK statistics ===============================
 def mdisk_processing(xml)
   mdisks = xml.css('mdsk')
   mdisks.each do |mdisk|
@@ -35,7 +36,10 @@ def mdisk_processing(xml)
     end
   end
 end
+#==========END MDISK ==================================
 
+
+#===========VDISK statistics =============================
 def vdisk_processing(xml)
   vdisks = xml.css('vdsk')
   vdisks.each do |vdisk|
@@ -55,14 +59,14 @@ def vdisk_processing(xml)
     end
   end
 end
+#===========END VDISK ================================
 
 # ========================================================================
 # Main processing
-#
+# ========================================================================
 
 Dir.foreach(dir) do |file|
-  next if (file == '.') || (file == '..') || (file == 'old')
-  puts file
+  next if (file == '.') || (file == '..') 
 
   f = File.open(dir + file, 'r')
 
@@ -74,10 +78,13 @@ Dir.foreach(dir) do |file|
   @objects_type = info.attr('contains')
   @timestamp = Time.parse(info.attr('timestamp')).to_i
 
-  mdisk_processing(xml) if @objects_type.to_s == 'managedDiskStats'
-  vdisk_processing(xml) if @objects_type.to_s == 'virtualDiskStats'
+  mdisk_processing(xml) if @objects_type.to_s == 'managedDiskStats' #processing MDISK statistics
+  vdisk_processing(xml) if @objects_type.to_s == 'virtualDiskStats' #processing VDISK statistics
 
   f.close
-  FileUtils.cp(dir + file, dir + 'old/') # you can comment this line if do not want to save old statistics files
-  FileUtils.remove(dir + file, force: true)
+  FileUtils.remove(dir + file, force: true) #remove processed file
 end
+
+# =======================================================================
+# END Main 
+#========================================================================
