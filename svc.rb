@@ -4,7 +4,8 @@
 # https://www.ibm.com/support/knowledgecenter/STLM6B_7.8.0/com.ibm.storwize.v3500.780.doc/svc_clusterstartstatswin_20qm0u.html
 #
 
-dir = '../iostat/' # Folder for statistics files
+#dir = '../iostat/' # Folder for statistics files
+dir = ENV['SVC_STATS_FOLDER'] # Path for folder with stats files
 influxdb_host = ENV['SVC_INFLUX_HOST'] # InfluxDB host
 influxdb_db = ENV['SVC_INFLUX_DB'] # InfluxDB database
 
